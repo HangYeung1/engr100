@@ -62,9 +62,10 @@ def detect_people(img):
 				x = int(centerX - (width / 2))
 				y = int(centerY - (height / 2))
 				box = [x, y, int(width), int(height)]
-				boxes.append(box)
-				confidences.append(float(confidence))
-				classIDs.append(classID)
+				if classID == 0:
+					boxes.append(box)
+					confidences.append(float(confidence))
+					classIDs.append(classID)
 
 	indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.5, 0.4)
 	if len(indices) > 0:
@@ -104,11 +105,16 @@ while(True):
 	# Grab latest frame
 	ret, img = vid.read()
 	img = cv2.resize(img, (0,0), fx = 0.5, fy = 0.5)
+	imgX = img.shape[1]
+	imgY = img.shape[0]
 
 	# Detect people in the frame
 	peopleFound = detect_people(img)
 	target = find_biggest(peopleFound)
-	print(target)
+	if target is not None:
+		print(target[0] / imgX, target[1] / imgY)
+	else:
+		print("No target found")
 
 	# Quit if 'q' is pressed
 	if cv2.waitKey(1) & 0xFF == ord('q'): 
