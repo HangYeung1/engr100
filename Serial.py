@@ -1,7 +1,7 @@
 import serial
 import time
 
-ARDUINO_PORT = 'COM6'
+ARDUINO_PORT = '/dev/cu.usbmodem21301'
 ARDUINO_BAUD_RATE = 9600
 
 ser = serial.Serial(ARDUINO_PORT, ARDUINO_BAUD_RATE)

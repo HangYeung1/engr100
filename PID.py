@@ -19,9 +19,9 @@ class PID:
     def step(self, input : float, dt : float):
         error = self.target - input
         derivative = (error - self.prevError) / dt
-        integral += error * dt
+        self.integral += error * dt
         self.prevError = error
 
-        return error * self.kP + self.integral * self.kI + self.derivative * self.kD
+        return error * self.kP + self.integral * self.kI + derivative * self.kD
 
     

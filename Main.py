@@ -21,6 +21,7 @@ while True:
     result = detect_people(frame)
 
     if result is None:
+        setTurretPower(0)
         print("NOPE")
         continue
 
