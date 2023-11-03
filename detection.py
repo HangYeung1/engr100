@@ -27,7 +27,7 @@ except IndexError:
 
 # foward_pass(img)
 # Returns a list of people found in the image
-def foward_pass(img):
+def forward_pass(img):
 	# Construct a blob from the image
 	blob = cv2.dnn.blobFromImage(img, 1/255.0, (416, 416), swapRB=True, crop=False)
 	r = blob[0, 0, :, :]
@@ -103,9 +103,9 @@ def find_biggest(peopleFound):
 # detect_people(img)
 # Returns a relative location of the biggest person found
 def detect_people(img):
-	imgX = img.shape[0]
-	imgY = img.shape[1]
-	peopleFound = foward_pass(img)
+	imgY = img.shape[0]
+	imgX = img.shape[1]
+	peopleFound = forward_pass(img)
 	target = find_biggest(peopleFound)
 	if target is not None:
 		return (target[0] / imgX, target[1] / imgY)
