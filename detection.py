@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+########## INITAL SETUP ##########
+
 # Load names of classes and assign random colors
 classes = open('coco.names').read().strip().split('\n')
 np.random.seed(42)
@@ -24,15 +26,10 @@ except IndexError:
 # Create video capture object
 vid = cv2.VideoCapture(0)
 
-while(True):
-	# Grab latest frame
-	ret, img = vid.read()
 
-	# Quit if 'q' is pressed
-	if cv2.waitKey(1) & 0xFF == ord('q'): 
-		print("Quitting...")
-		break
+########## CV FUNCTIONS ##########
 
+def detect_people(img):
 	# Construct a blob from the image
 	blob = cv2.dnn.blobFromImage(img, 1/255.0, (416, 416), swapRB=True, crop=False)
 	r = blob[0, 0, :, :]
@@ -46,6 +43,10 @@ while(True):
 	confidences = []
 	classIDs = []
 	h, w = img_copy.shape[:2]
+
+	# List of found people
+	# x, y, w, h
+	peopleFound = []
 
 	# Loop over the outputs
 	confidence_level = 0.2
@@ -79,8 +80,42 @@ while(True):
 			text = "{}: {:.4f}".format(classes[classIDs[i]], confidences[i])
 			cv2.putText(img_copy, text, (x,y -5), cv2.FONT_HERSHEY_SIMPLEX,
 					.7, color, 2, cv2.LINE_AA)
+			
+			# Add to list of people found
+			peopleFound.append((x,y, width, height))
 	
 	cv2.imshow('camera', img_copy)
+	return peopleFound
+
+def find_biggest(peopleFound):
+	biggest = 0
+	current = 0
+	for person in peopleFound:
+		if person[2] * person[3] > biggest:
+			biggest = current
+			current += 1
+	if len(peopleFound) > 0:
+		biggestPerson = peopleFound[biggest]
+		return (biggestPerson[0] + biggestPerson[2]/2, biggestPerson[1] + biggestPerson[3]/2)
+	return None
+
+########## MAIN LOOP ##########
+while(True):
+	# Grab latest frame
+	ret, img = vid.read()
+	img = cv2.resize(img, (0,0), fx = 0.5, fy = 0.5)
+
+	# Detect people in the frame
+	peopleFound = detect_people(img)
+	target = find_biggest(peopleFound)
+	print(target)
+
+	# Quit if 'q' is pressed
+	if cv2.waitKey(1) & 0xFF == ord('q'): 
+		print("Quitting...")
+		break
+
+########## CLEANUP ##########
 
 # Relase the VideoCapture object
 vid.release() 
