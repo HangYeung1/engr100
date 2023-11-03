@@ -105,7 +105,7 @@ def find_biggest(peopleFound):
 def detect_people(img):
 	imgX = img.shape[0]
 	imgY = img.shape[1]
-	peopleFound = detect_people(img)
+	peopleFound = foward_pass(img)
 	target = find_biggest(peopleFound)
 	if target is not None:
 		return (target[0] / imgX, target[1] / imgY)
