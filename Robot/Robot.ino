@@ -22,8 +22,8 @@ void setup() {
 
 // input: [-100, 100]
 void setTurretPower(int power){
-  leftTurret.writeMicroseconds(1500 - power * 5);
-  rightTurret.writeMicroseconds(1500 + power * 5);
+  leftTurret.writeMicroseconds(1500 + power * 5);
+  rightTurret.writeMicroseconds(1500 - power * 5);
 }
 
 // 200
