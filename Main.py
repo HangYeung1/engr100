@@ -24,8 +24,14 @@ while True:
         setTurretPower(0)
         print("NOPE")
         continue
+    else: 
+        # Dislpay CV view
+        personX = int(result[0] * frame.shape[1])
+        personY = int(result[1] * frame.shape[0])
+        cv2.rectangle(frame, (personX-25, personY-25), (personX + 25, personY + 25), (0,0,50), 2)
+        cv2.putText(frame, "person", (personX, personY - 5), cv2.FONT_HERSHEY_SIMPLEX, .7, (0,0,255) , 2, cv2.LINE_AA)
+        cv2.imshow("frame", frame)
+        cv2.waitKey(1)
 
     power = turnPID.step(result[0], 0.33)
     setTurretPower(power)
-
-
