@@ -42,8 +42,12 @@ void rewind(){
 
 // 400
 void addPayload(){
+  slider.writeMicroseconds(1000);
+  delay(500);
+  slider.writeMicroseconds(1500);
+  delay(300);
   slider.writeMicroseconds(2000);
-  delay(1000);
+  delay(500);
   slider.writeMicroseconds(1500);
 }
 
@@ -85,9 +89,9 @@ void loop() {
   //   rewind();
   // }
 
-  // if(command == 400){
-  //   addPayload();
-  // }
+  if(command == 400){
+    addPayload();
+  }
 
   if(command >= -100 && command <= 100){
     setTurretPower(command);

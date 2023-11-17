@@ -6,6 +6,7 @@ class PID:
         self.kI = kI
         self.kD = kD
         self.target = 0
+        self.error = 0
         self.prevError = 0
         self.integral = 0
     
@@ -16,12 +17,15 @@ class PID:
     def setTarget(self, target : float):
         self.target = target
 
-    def step(self, input : float, dt : float):
-        error = self.target - input
-        derivative = (error - self.prevError) / dt
-        self.integral += error * dt
-        self.prevError = error
+    def getError(self):
+        return self.error
 
-        return error * self.kP + self.integral * self.kI + derivative * self.kD
+    def step(self, input : float, dt : float):
+        self.error = self.target - input
+        derivative = (self.error - self.prevError) / dt
+        self.integral += self.error * dt
+        self.prevError = self.error
+
+        return self.error * self.kP + self.integral * self.kI + derivative * self.kD
 
     
